@@ -19,12 +19,12 @@ using namespace std;
 
 
 // Constants
-const unsigned int SCR_W = 1024;
-const unsigned int SCR_H = 576;
+const unsigned int SCR_W = 1366;
+const unsigned int SCR_H = 768;
 const unsigned int SCR_MIN_W = 640;
 const unsigned int SCR_MIN_H = 360;
-const unsigned int SCR_MAX_W = 1280;
-const unsigned int SCR_MAX_H = 720;
+const unsigned int SCR_MAX_W = 1366;
+const unsigned int SCR_MAX_H = 768;
 
 // Pointer to the window
 GLFWwindow* window;
@@ -50,8 +50,8 @@ bool initializeOpenGL()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	// Window (576p default) and Context Creation
-	window = glfwCreateWindow(SCR_W, SCR_H, "Window", NULL, NULL);
+	// Window (768p fullscreen default) and Context Creation
+	window = glfwCreateWindow(SCR_W, SCR_H, "Window", glfwGetPrimaryMonitor(), NULL);
 	if (!window)
 	{
 		cout << "Window or context creation failed" << endl;

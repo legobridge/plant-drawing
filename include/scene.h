@@ -48,7 +48,7 @@ public:
 		// Setup transformation matrix
 		glm::mat4 trans;
 		trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, 0.0f));
-		trans = glm::scale(trans, glm::vec3(1 / (float)WORLD_W, 1 / (float)WORLD_H, 0.5f));
+		trans = glm::scale(trans, glm::vec3(1 / (float)WORLD_W, 1 / (float)WORLD_H, 1.0f));
 		unsigned int transformLoc = glGetUniformLocation(myShader.ID, "transform");
 		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
@@ -66,7 +66,7 @@ public:
 		// Setup transformation matrix
 		glm::mat4 trans;
 		trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, 0.0f));
-		trans = glm::scale(trans, glm::vec3(1 / (float)WORLD_W, 1 / (float)WORLD_H, 0.5f));
+		trans = glm::scale(trans, glm::vec3(1 / (float)WORLD_W, 1 / (float)WORLD_H, 1.0f));
 		unsigned int transformLoc = glGetUniformLocation(myShader.ID, "transform");
 		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
@@ -84,7 +84,7 @@ public:
 		// Setup transformation matrix
 		glm::mat4 trans;
 		trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, 0.0f));
-		trans = glm::scale(trans, glm::vec3(1 / (float)WORLD_W, 1 / (float)WORLD_H, 0.5f));
+		trans = glm::scale(trans, glm::vec3(1 / (float)WORLD_W, 1 / (float)WORLD_H, 1.0f));
 		unsigned int transformLoc = glGetUniformLocation(myShader.ID, "transform");
 		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
