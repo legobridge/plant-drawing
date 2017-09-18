@@ -38,5 +38,8 @@
     <ClInclude Include="include\scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\lsys.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

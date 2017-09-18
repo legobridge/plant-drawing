@@ -7,6 +7,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <shader.h>
+#include <linecalc.h>
+#include <circlecalc.h>
+#include <lsys.h>
 #include <vector>
 
 using namespace std;
@@ -20,6 +23,7 @@ public:
 	unsigned int VAO;
 	vector<float> vertexVector;
 	size_t n;
+	unsigned int iteration;
 
 	// Constructor definition
 	Scene()
@@ -42,13 +46,20 @@ public:
 
 	void setFirstTreeVertices()
 	{
-		vertexVector = {100.0f, 100.0f, 0.0f};
+		string encoding = "F";
+		LSys myLSys(1);
+		for (unsigned int i = 0; i < iteration; i++)
+		{
+			encoding = myLSys.expand(encoding);
+		}
+		vertexVector = {};
+		// Put stuff in vector
 		n = vertexVector.size();
 
 		// Setup transformation matrix
 		glm::mat4 trans;
-		trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, 0.0f));
 		trans = glm::scale(trans, glm::vec3(1 / (float)WORLD_W, 1 / (float)WORLD_H, 1.0f));
+		trans = glm::translate(trans, glm::vec3(1000.0f, -668.0f, 0.0f));
 		unsigned int transformLoc = glGetUniformLocation(myShader.ID, "transform");
 		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
@@ -60,13 +71,20 @@ public:
 
 	void setSecondTreeVertices()
 	{
-		vertexVector = {-100.0f, -100.0f, 0.0f};
+		string encoding = "F";
+		LSys myLSys(2);
+		for (unsigned int i = 0; i < iteration; i++)
+		{
+			encoding = myLSys.expand(encoding);
+		}
+		vertexVector = {};
+		// Put stuff in vector
 		n = vertexVector.size();
 
 		// Setup transformation matrix
 		glm::mat4 trans;
-		trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, 0.0f));
 		trans = glm::scale(trans, glm::vec3(1 / (float)WORLD_W, 1 / (float)WORLD_H, 1.0f));
+		trans = glm::translate(trans, glm::vec3(300.0f, -668.0f, 0.0f));
 		unsigned int transformLoc = glGetUniformLocation(myShader.ID, "transform");
 		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
@@ -78,13 +96,20 @@ public:
 
 	void setThirdTreeVertices()
 	{
-		vertexVector = {100.0f, -100.0f, 0.0f};
+		string encoding = "F";
+		LSys myLSys(3);
+		for (unsigned int i = 0; i < iteration; i++)
+		{
+			encoding = myLSys.expand(encoding);
+		}
+		vertexVector = {};
+		// Put stuff in vector
 		n = vertexVector.size();
 
 		// Setup transformation matrix
 		glm::mat4 trans;
-		trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, 0.0f));
 		trans = glm::scale(trans, glm::vec3(1 / (float)WORLD_W, 1 / (float)WORLD_H, 1.0f));
+		trans = glm::translate(trans, glm::vec3(-400.0f, -668.0f, 0.0f));
 		unsigned int transformLoc = glGetUniformLocation(myShader.ID, "transform");
 		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
@@ -94,8 +119,10 @@ public:
 
 	}
 
+	// Draw an object from the vertices stored in vertexVector
 	void drawObject()
 	{
+		// Convert vector to C-style array
 		float *vertices = new float[n];
 		for (size_t i = 0; i < n; i++)
 		{
@@ -118,9 +145,9 @@ public:
 		glDeleteBuffers(1, &VBO);
 	}
 
+	// Driver function
 	void drawScene()
 	{
-		// Use the shader program
 		myShader.use();
 
 		setFirstTreeVertices();

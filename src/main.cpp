@@ -29,6 +29,9 @@ const unsigned int SCR_MAX_H = 768;
 // Pointer to the window
 GLFWwindow* window;
 
+// Counter for iterations to render
+int iteration = 50;
+
 
 // Callback Function for Framebuffer Resizing
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -36,6 +39,28 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	glViewport(0, 0, width, height);
 }
 
+// **************************************
+// ********** Input Processing **********
+// - Pressing Esc closes the window
+// - Up key computes next iteration
+// - Down key leads to previous iteration
+// **************************************
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+	{
+		glfwSetWindowShouldClose(window, true);
+	}
+	if (key == GLFW_KEY_UP && action == GLFW_PRESS)
+	{
+		iteration++;
+	}
+	if (key == GLFW_KEY_DOWN && action == GLFW_PRESS)
+	{
+		iteration = max(iteration - 1, 0);
+	}
+}
 
 // OpenGL Initialization
 bool initializeOpenGL()
@@ -51,7 +76,8 @@ bool initializeOpenGL()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// Window (768p fullscreen default) and Context Creation
-	window = glfwCreateWindow(SCR_W, SCR_H, "Window", glfwGetPrimaryMonitor(), NULL);
+	window = glfwCreateWindow(SCR_W, SCR_H, "Window", NULL, NULL);
+	// window = glfwCreateWindow(SCR_W, SCR_H, "Window", glfwGetPrimaryMonitor(), NULL);
 	if (!window)
 	{
 		cout << "Window or context creation failed" << endl;
@@ -62,6 +88,9 @@ bool initializeOpenGL()
 
 	// Register Callback Function for Window Resize
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+	// Register Callback Function for keypresses
+	glfwSetKeyCallback(window, key_callback);
 
 	// Fix Aspect Ratio to 16:9
 	glfwSetWindowAspectRatio(window, 16, 9);
@@ -85,20 +114,6 @@ bool initializeOpenGL()
 }
 
 
-// ********************************
-// ******* Input Processing *******
-// - Pressing Esc closes the window
-// ********************************
-
-void processInput(GLFWwindow *window)
-{
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-	{
-		glfwSetWindowShouldClose(window, true);
-	}
-}
-
-
 int main()
 {
 	// OpenGL Initialization
@@ -113,21 +128,21 @@ int main()
 	// Render Loop
 	while (!glfwWindowShouldClose(window))
 	{
-		// Process Input
-		processInput(window);
+		// Update iteration counter
+		myScene.iteration = iteration;
 
+		// ******** Rendering Commands ********
 
-		// Rendering Commands
 		// Background Color
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		// Draw Objects
-		Scene myScene;
 		myScene.drawScene();
 
+		// ****** End Rendering Commands ******
 
-		// Check and call events, then swap buffers
+		// Check for and call events, then swap buffers
 		glfwPollEvents();
 		glfwSwapBuffers(window);
 	}

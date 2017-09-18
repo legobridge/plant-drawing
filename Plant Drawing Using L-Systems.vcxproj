@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClInclude Include="include\circlecalc.h" />
     <ClInclude Include="include\linecalc.h" />
+    <ClInclude Include="include\lsys.h" />
     <ClInclude Include="include\scene.h" />
     <ClInclude Include="include\shader.h" />
   </ItemGroup>
