@@ -42,52 +42,55 @@ public:
 
 	void setFirstTreeVertices()
 	{
-		vertexVector = { 0.0f, 0.0f, 0.0f };
+		vertexVector = {100.0f, 100.0f, 0.0f};
 		n = vertexVector.size();
 
 		// Setup transformation matrix
 		glm::mat4 trans;
-		trans = glm::translate(trans, glm::vec3(0.5f, 0.5f, 0.0f));
+		trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, 0.0f));
+		trans = glm::scale(trans, glm::vec3(1 / (float)WORLD_W, 1 / (float)WORLD_H, 0.5f));
 		unsigned int transformLoc = glGetUniformLocation(myShader.ID, "transform");
 		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
 		// Setup fragment color
 		unsigned int myColorLoc = glGetUniformLocation(myShader.ID, "myColor");
-		glUniform3f(myColorLoc, 1.0f, 1.0f, 1.0f);
+		glUniform3f(myColorLoc, 1.0f, 0.0f, 0.0f);
 
 	}
 
 	void setSecondTreeVertices()
 	{
-		vertexVector = { 0.2f, 0.2f, 0.0f };
+		vertexVector = {-100.0f, -100.0f, 0.0f};
 		n = vertexVector.size();
 
 		// Setup transformation matrix
 		glm::mat4 trans;
-		trans = glm::translate(trans, glm::vec3(0.5f, 0.5f, 0.0f));
+		trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, 0.0f));
+		trans = glm::scale(trans, glm::vec3(1 / (float)WORLD_W, 1 / (float)WORLD_H, 0.5f));
 		unsigned int transformLoc = glGetUniformLocation(myShader.ID, "transform");
 		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
 		// Setup fragment color
 		unsigned int myColorLoc = glGetUniformLocation(myShader.ID, "myColor");
-		glUniform3f(myColorLoc, 1.0f, 1.0f, 1.0f);
+		glUniform3f(myColorLoc, 0.0f, 1.0f, 0.0f);
 
 	}
 
 	void setThirdTreeVertices()
 	{
-		vertexVector = { 0.3f, 0.3f, 0.0f };
+		vertexVector = {100.0f, -100.0f, 0.0f};
 		n = vertexVector.size();
 
 		// Setup transformation matrix
 		glm::mat4 trans;
-		trans = glm::translate(trans, glm::vec3(0.5f, 0.5f, 0.0f));
+		trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, 0.0f));
+		trans = glm::scale(trans, glm::vec3(1 / (float)WORLD_W, 1 / (float)WORLD_H, 0.5f));
 		unsigned int transformLoc = glGetUniformLocation(myShader.ID, "transform");
 		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
 		// Setup fragment color
 		unsigned int myColorLoc = glGetUniformLocation(myShader.ID, "myColor");
-		glUniform3f(myColorLoc, 1.0f, 1.0f, 1.0f);
+		glUniform3f(myColorLoc, 0.0f, 0.0f, 1.0f);
 
 	}
 
