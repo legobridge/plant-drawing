@@ -13,12 +13,12 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <scene.h>
 
 using namespace std;
 
 
 // Constants
-
 const unsigned int SCR_W = 1024;
 const unsigned int SCR_H = 576;
 const unsigned int SCR_MIN_W = 640;
@@ -27,12 +27,10 @@ const unsigned int SCR_MAX_W = 1280;
 const unsigned int SCR_MAX_H = 720;
 
 // Pointer to the window
-
 GLFWwindow* window;
 
 
 // Callback Function for Framebuffer Resizing
-
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
@@ -103,38 +101,14 @@ void processInput(GLFWwindow *window)
 
 int main()
 {
-	// Computations
-	/*Calc myCalc(a, b);
-	float *vertices = myCalc.getVertexArray();
-	size_t n = myCalc.n;*/
-
 	// OpenGL Initialization
 	if (!initializeOpenGL())
 	{
 		return -1;
 	}
 
-	// Build and compile shaders
-	Shader myShader("./src/shader/vertex.shader", "./src/shader/fragment.shader");
-
-	//// Generate and bind vertex array object
-	//unsigned int VAO;
-	//glGenVertexArrays(1, &VAO);
-	//glBindVertexArray(VAO);
-
-	//// Generate and bind vertex buffer object
-	//unsigned int VBO;
-	//glGenBuffers(1, &VBO);
-	//glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	//glBufferData(GL_ARRAY_BUFFER, n * sizeof(float), vertices, GL_STATIC_DRAW);
-	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	//glEnableVertexAttribArray(0);
-
-	//glBindBuffer(GL_ARRAY_BUFFER, 0);
-	//glBindVertexArray(0);
-
-	// Wireframe Mode
-	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	// Create instance of the Scene class
+	Scene myScene;
 
 	// Render Loop
 	while (!glfwWindowShouldClose(window))
@@ -148,10 +122,10 @@ int main()
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		/*myShader.use();
-		glBindVertexArray(VAO);
-		glDrawArrays(GL_POINTS, 0, n / 3);
-		glBindVertexArray(0);*/
+		// Draw Objects
+		Scene myScene;
+		myScene.drawScene();
+
 
 		// Check and call events, then swap buffers
 		glfwPollEvents();
@@ -159,10 +133,6 @@ int main()
 	}
 
 	glfwDestroyWindow(window);
-
-	//// Deallocation of Resources
-	//glDeleteVertexArrays(1, &VAO);
-	//glDeleteBuffers(1, &VBO);
 
 	glfwTerminate();
 	return 0;
