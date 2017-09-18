@@ -1,6 +1,6 @@
-// Main Source File for Line Segment Drawing in OpenGL
+// Main Source File for L-System Based Plant Drawing in OpenGL
 // Authors -  Asutosh Sistla, Kushal Agrawal, Suchit Kar
-// Date of Completion - 15/09/2017
+// Date of Completion - 18/09/2017
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
