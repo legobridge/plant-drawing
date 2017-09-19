@@ -30,7 +30,7 @@ const unsigned int SCR_MAX_H = 768;
 GLFWwindow* window;
 
 // Counter for iterations to render
-int iteration = 50;
+int iteration = 1;
 
 
 // Callback Function for Framebuffer Resizing
@@ -54,7 +54,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	}
 	if (key == GLFW_KEY_UP && action == GLFW_PRESS)
 	{
-		iteration++;
+		iteration = min(iteration + 1, 5);
 	}
 	if (key == GLFW_KEY_DOWN && action == GLFW_PRESS)
 	{
@@ -143,7 +143,7 @@ int main()
 		// ****** End Rendering Commands ******
 
 		// Check for and call events, then swap buffers
-		glfwPollEvents();
+		glfwWaitEvents();
 		glfwSwapBuffers(window);
 	}
 

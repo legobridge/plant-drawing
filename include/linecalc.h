@@ -23,16 +23,6 @@ public:
 		this -> b = b;
 	}
 
-	// Normalize coordinate magnitudes to values between -0.8 to 0.8
-	void normalizeCoordinates()
-	{
-		float mx = max(max(abs(a.first), abs(a.second)), max(abs(b.first), abs(b.second)));
-		for (size_t i = 0; i < n; i++)
-		{
-			v[i] = (0.8f * v[i]) / mx;
-		}
-	}
-
 	// Find which octant the slope vector belongs to
     void findCase()
     {
@@ -83,7 +73,8 @@ public:
         switch (transformCase)
         {
             case 2:
-                swap (a,b);
+                swap (a.first, a.second);
+				swap(b.first, b.second);
                 break;
             case 3:
                 a.first = p1.second;
@@ -157,16 +148,12 @@ public:
 			x++;
 			v.push_back(x);
 			v.push_back(y);
-			v.push_back(0);
+			v.push_back(0.0f);
 		}
-		v.push_back(b.first);
-		v.push_back(b.second);
-		v.push_back(0.0f);
 	}
 
 	// Driver function to call other functions of the class
-	// and return an array of coordinates to be drawn
-	float* getVertexArray()
+	vector<float> getVertexVector()
 	{
         findCase();
 
@@ -181,13 +168,7 @@ public:
             v[i] = t.first;
             v[i + 1] = t.second;
         }
-		normalizeCoordinates();
-		float *a = new float[n];
-		for (size_t i = 0; i < n; i++)
-		{
-			a[i] = v[i];
-		}
-		return a;
+		return v;
     }
 };
 
