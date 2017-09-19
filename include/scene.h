@@ -16,136 +16,83 @@ using namespace std;
 class Scene
 {
 public:
-	const unsigned int WORLD_W = 1366;
-	const unsigned int WORLD_H = 768;
-	Shader myShader;
+	unsigned int WORLD_W;
+	unsigned int WORLD_H;
+	Shader* myShader;
 	unsigned int VAO;
-	vector<float> vertexVector;
-	size_t n;
-	unsigned int iteration;
+	pair<vector<float>, vector<float> > vertexVectors1;
+	pair<vector<float>, vector<float> > vertexVectors2;
+	pair<vector<float>, vector<float> > vertexVectors3;
+	int iteration;
 
 	// Constructor definition
 	Scene()
 	{
+		// Set World size
+		WORLD_W = 1366;
+		WORLD_H = 768;
+
 		// Build and compile shaders
-		myShader = Shader("./src/shader/vertex.shader", "./src/shader/fragment.shader");
-		myShader.use();
+		myShader = new Shader("./src/shader/vertex.shader", "./src/shader/fragment.shader");
+		myShader -> use();
 
 		// Generate and bind vertex array object
 		glGenVertexArrays(1, &VAO);
 		glBindVertexArray(VAO);
+
+		iteration = 1;
 	}
 
 	// Destructor definition
 	~Scene()
 	{
 		// Deallocation of Resources
-		myShader.~Shader();
+		delete myShader;
 		glDeleteVertexArrays(1, &VAO);
 	}
 
-	void FirstTree()
+	void FirstTreeComputations()
 	{
 		LSys myLSys(1, "[T][+T][-T]");
-		for (unsigned int i = 1; i <= iteration; i++)
+		for (int i = 1; i <= iteration; i++)
 		{
 			myLSys.expand();
 		}
-		 pair<vector<float>, vector<float> > p = myLSys.getVertices();
 
-
-		// ********* Branch Rendering *********
-		vertexVector = p.first;
-		n = vertexVector.size();
-
-		// Setup transformation matrix
-		glm::mat4 trans;
-		trans = glm::scale(trans, glm::vec3(1 / (float)WORLD_W, 1 / (float)WORLD_H, 1.0f));
-		trans = glm::translate(trans, glm::vec3(1000.0f, -668.0f, 0.0f));
-		unsigned int transformLoc = glGetUniformLocation(myShader.ID, "transform");
-		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
-
-		// Setup fragment color
-		unsigned int myColorLoc = glGetUniformLocation(myShader.ID, "myColor");
-		glUniform3f(myColorLoc, 1.0f, 0.0f, 0.0f);
-
-		drawObject();
-
-
-		//// ********* Flower Rendering *********
-		//vertexVector = p.second;
-		//n = vertexVector.size();
-
-		//// Setup transformation matrix
-		//trans = glm::mat4();
-		//trans = glm::scale(trans, glm::vec3(1 / (float)WORLD_W, 1 / (float)WORLD_H, 1.0f));
-		//trans = glm::translate(trans, glm::vec3(1000.0f, -668.0f, 0.0f));
-		//glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
-
-		//// Setup fragment color
-		//glUniform3f(myColorLoc, 1.0f, 0.0f, 0.0f);
-
-		//drawObject();
-	}
-
-	void SecondTree()
-	{
-		LSys myLSys(1, "[T][+T][-T]");
-		for (unsigned int i = 1; i <= iteration; i++)
-		{
-			myLSys.expand();
-		}
 		pair<vector<float>, vector<float> > p = myLSys.getVertices();
 
-		// ********* Branch Rendering *********
-		vertexVector = p.first;
-		n = vertexVector.size();
+		// ********* Branch Computations *********
+		vertexVectors1.first = p.first;
 
-		// Setup transformation matrix
-		glm::mat4 trans;
-		trans = glm::scale(trans, glm::vec3(1 / (float)WORLD_W, 1 / (float)WORLD_H, 1.0f));
-		trans = glm::translate(trans, glm::vec3(300.0f, -668.0f, 0.0f));
-		unsigned int transformLoc = glGetUniformLocation(myShader.ID, "transform");
-		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
-		// Setup fragment color
-		unsigned int myColorLoc = glGetUniformLocation(myShader.ID, "myColor");
-		glUniform3f(myColorLoc, 0.0f, 1.0f, 0.0f);
-
-		drawObject();
+		// ********* Flower Computations *********
+		vertexVectors1.second = p.second;
 	}
 
-	void ThirdTree()
-	{
-		LSys myLSys(1, "[T][+T][-T]");
-		for (unsigned int i = 1; i <= iteration; i++)
-		{
-			myLSys.expand();
-		}
-		pair<vector<float>, vector<float> > p = myLSys.getVertices();
+	//void SecondTree()
+	//{
+	//}
 
-		// ********* Branch Rendering *********
-		vertexVector = p.first;
-		n = vertexVector.size();
-		
-		// Setup transformation matrix
-		glm::mat4 trans;
-		trans = glm::scale(trans, glm::vec3(1 / (float)WORLD_W, 1 / (float)WORLD_H, 1.0f));
-		trans = glm::translate(trans, glm::vec3(-400.0f, -668.0f, 0.0f));
-		unsigned int transformLoc = glGetUniformLocation(myShader.ID, "transform");
-		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
-
-		// Setup fragment color
-		unsigned int myColorLoc = glGetUniformLocation(myShader.ID, "myColor");
-		glUniform3f(myColorLoc, 0.0f, 0.0f, 1.0f);
-
-		drawObject();
-	}
+	//void ThirdTree()
+	//{
+	//}
 
 	// Draw an object from the vertices stored in vertexVector
-	void drawObject()
+	void drawObject(vector<float> vertexVector, glm::vec3 translationVector, vector<float> rgb)
 	{
+		// Setup transformation matrix
+		glm::mat4 trans;
+		trans = glm::scale(trans, glm::vec3(1 / (float)WORLD_W, 1 / (float)WORLD_H, 1.0f));
+		trans = glm::translate(trans, translationVector);
+		unsigned int transformLoc = glGetUniformLocation(myShader -> ID, "transform");
+		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
+
+		// Setup fragment color
+		unsigned int myColorLoc = glGetUniformLocation(myShader -> ID, "myColor");
+		glUniform3f(myColorLoc, rgb[0], rgb[1], rgb[2]);
+
 		// Convert vector to C-style array
+		size_t n = vertexVector.size();
 		float *vertices = new float[n];
 		for (size_t i = 0; i < n; i++)
 		{
@@ -168,12 +115,25 @@ public:
 		glDeleteBuffers(1, &VBO);
 	}
 
-	// Driver function
-	void drawScene()
+	void drawObjects()
 	{
-		FirstTree();
-		SecondTree();
-		ThirdTree();
+		vector<float> g = {0.0f, 1.0f, 0.0f};
+		vector<float> r = {1.0f, 0.0f, 0.0f};
+
+		drawObject(vertexVectors1.first, glm::vec3(0.0f, 0.0f, 0.0f), g);
+		drawObject(vertexVectors1.second, glm::vec3(0.0f, 0.0f, 0.0f), r);
+		/*drawObject(vertexVectors2.first);
+		drawObject(vertexVectors2.second);
+		drawObject(vertexVectors3.first);
+		drawObject(vertexVectors3.second);*/
+	}
+
+	// Computation driver function
+	void computeSceneVertices()
+	{
+		FirstTreeComputations();
+		/*SecondTreeComputations();
+		ThirdTreeComputations();*/
 	}
 };
 

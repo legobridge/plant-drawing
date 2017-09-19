@@ -103,6 +103,12 @@ public:
 				}
 				pos = npos;
 			}
+			if (encoding[i] == 'R')
+			{
+				p.second.push_back(pos.first);
+				p.second.push_back(pos.second);
+				p.second.push_back(0.0f);
+			}
 			if (encoding[i] == '[')
 			{
 				stk.push({pos, angle});
@@ -124,11 +130,6 @@ public:
 				angle += delta[depth / 2];
 			}
 		}
-		/*for (size_t j = 0; j < p.first.size(); j += 3)
-		{
-			cout << p.first[j] << " " << p.first[j + 1] << " " << p.first[j + 2] << endl;
-		}
-		cout << endl;*/
 		return p;
 	}
 };

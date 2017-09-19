@@ -26,11 +26,11 @@ const unsigned int SCR_MIN_H = 360;
 const unsigned int SCR_MAX_W = 1366;
 const unsigned int SCR_MAX_H = 768;
 
-// Pointer to the window
+// Pointer to a GLFWwindow object
 GLFWwindow* window;
 
-// Counter for iterations to render
-int iteration = 1;
+// Pointer to a Scene object
+Scene* myScene;
 
 
 // Callback Function for Framebuffer Resizing
@@ -54,11 +54,13 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	}
 	if (key == GLFW_KEY_UP && action == GLFW_PRESS)
 	{
-		iteration = min(iteration + 1, 5);
+		myScene -> iteration = min(myScene -> iteration + 1, 5);
+		myScene -> computeSceneVertices();
 	}
 	if (key == GLFW_KEY_DOWN && action == GLFW_PRESS)
 	{
-		iteration = max(iteration - 1, 0);
+		myScene -> iteration = max(myScene -> iteration - 1, 0);
+		myScene -> computeSceneVertices();
 	}
 }
 
@@ -75,7 +77,7 @@ bool initializeOpenGL()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	// Window (768p fullscreen default) and Context Creation
+	// Window (default: 768p fullscreen) and Context Creation
 	window = glfwCreateWindow(SCR_W, SCR_H, "Window", NULL, NULL);
 	// window = glfwCreateWindow(SCR_W, SCR_H, "Window", glfwGetPrimaryMonitor(), NULL);
 	if (!window)
@@ -122,15 +124,13 @@ int main()
 		return -1;
 	}
 
-	// Create instance of the Scene class
-	Scene myScene;
+	// Create Scene object myScene
+	myScene = new Scene();
+	myScene -> computeSceneVertices();
 
-	// Render Loop
+	// **************** Render Loop ****************
 	while (!glfwWindowShouldClose(window))
 	{
-		// Update iteration counter
-		myScene.iteration = iteration;
-
 		// ******** Rendering Commands ********
 
 		// Background Color
@@ -138,17 +138,18 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		// Draw Objects
-		myScene.drawScene();
+		myScene -> drawObjects();
 
 		// ****** End Rendering Commands ******
 
 		// Check for and call events, then swap buffers
-		glfwWaitEvents();
+		glfwPollEvents();
 		glfwSwapBuffers(window);
 	}
 
+	// Deallocation of Resources
+	delete myScene;
 	glfwDestroyWindow(window);
-
 	glfwTerminate();
 	return 0;
 }
