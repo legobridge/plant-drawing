@@ -76,7 +76,7 @@ bool initializeOpenGL()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// Window (default: 768p fullscreen) and Context Creation
-	window = glfwCreateWindow(SCR_W, SCR_H, "Window", NULL, NULL);
+	window = glfwCreateWindow(SCR_W, SCR_H, "Plant Drawing with L-Systems", glfwGetPrimaryMonitor(), NULL);
 	if (!window)
 	{
 		cout << "Window or context creation failed" << endl;
@@ -121,7 +121,7 @@ int main()
 		return -1;
 	}
 
-	// Create Scene object myScene
+	// Create Scene object myScene and pre-process vertices
 	myScene = new Scene();
 	myScene -> computeSceneVertices();
 
@@ -131,7 +131,7 @@ int main()
 		// ******** Rendering Commands ********
 
 		// Background Color
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		glClearColor(0.01f, 0.02f, 0.2f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		// Draw Objects

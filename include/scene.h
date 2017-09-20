@@ -76,7 +76,7 @@ public:
 	// Increase iteration counter
 	void iterUp()
 	{
-		iteration = min(iteration + 1, 5);
+		iteration = min(iteration + 1, 4);
 	}
 
 	// Decrease iteration counter
@@ -103,6 +103,16 @@ public:
 
 		// Fetch calculated vertices from LSys Object
 		LSys2 -> setVertices();
+	}
+
+	// Vertex calculations for the third tree
+	void ThirdTreeComputations()
+	{
+		// Expand instruction string
+		LSys3->expand();
+
+		// Fetch calculated vertices from LSys Object
+		LSys3->setVertices();
 	}
 
 	// Draw an object from the vertices stored in vertexVector,
@@ -143,21 +153,38 @@ public:
 
 		// Delete the vertex buffer object from memory
 		glDeleteBuffers(1, &VBO);
+
+		// Delete the vertex array from memory
+		delete vertices;
 	}
 
 	void drawObjects()
 	{
 		// Color definitions for the tree stalks and flowers
-		vector<float> stalkColor = {0.0f, 1.0f, 0.0f};
-		vector<float> flowerColor = { 1.0f, 0.0f, 0.0f };
+		vector<float> stalkColor = {0.15f, 0.828f, 0.1f};
+		vector<float> trunkColor = {0.44f, 0.41f, 0.09f};
+		vector<float> branchColor = {0.45f, 0.80f, 0.09f};
+		vector<float> flowerColor1 = {0.97f, 0.24f, 0.0f};
+		vector<float> flowerColor2 = {0.95f, 0.05f, 0.05f};
 
 		// Draw the computed objects on screen
-		drawObject((LSys1 -> v[iteration]).first, glm::vec3(800.0f, -668.0f, 0.0f), stalkColor);
-		drawObject((LSys1 -> v[iteration]).second, glm::vec3(800.0f, -668.0f, 0.0f), flowerColor);
-		drawObject((LSys2 -> v[iteration]).first, glm::vec3(0.0f, -668.0f, 0.0f), stalkColor);
-		drawObject((LSys2 -> v[iteration]).second, glm::vec3(0.0f, -668.0f, 0.0f), flowerColor);
-		//drawObject((LSys3 -> v[iteration]), glm::vec3(-800.0f, -668.0f, 0.0f), stalkColor);
-		//drawObject((LSys3 -> v[iteration]), glm::vec3(-800.0f, -668.0f, 0.0f), flowerColor);
+		drawObject((LSys1 -> v[iteration])[0], glm::vec3(800.0f, -600.0f, 0.0f), stalkColor);
+		drawObject((LSys1 -> v[iteration])[1], glm::vec3(800.0f, -600.0f, 0.0f), trunkColor);
+		drawObject((LSys1 -> v[iteration])[2], glm::vec3(800.0f, -600.0f, 0.0f), branchColor);
+		drawObject((LSys1 -> v[iteration])[3], glm::vec3(800.0f, -600.0f, 0.0f), flowerColor1);
+		drawObject((LSys1 -> v[iteration])[4], glm::vec3(800.0f, -600.0f, 0.0f), flowerColor2);
+
+		drawObject((LSys2 -> v[iteration])[0], glm::vec3(0.0f, -600.0f, 0.0f), stalkColor);
+		drawObject((LSys2 -> v[iteration])[1], glm::vec3(0.0f, -600.0f, 0.0f), trunkColor);
+		drawObject((LSys2 -> v[iteration])[2], glm::vec3(0.0f, -600.0f, 0.0f), branchColor);
+		drawObject((LSys2 -> v[iteration])[3], glm::vec3(0.0f, -600.0f, 0.0f), flowerColor1);
+		drawObject((LSys2 -> v[iteration])[4], glm::vec3(0.0f, -600.0f, 0.0f), flowerColor2);
+
+		drawObject((LSys3 -> v[iteration])[0], glm::vec3(-800.0f, -600.0f, 0.0f), stalkColor);
+		drawObject((LSys3 -> v[iteration])[1], glm::vec3(-800.0f, -600.0f, 0.0f), trunkColor);
+		drawObject((LSys3 -> v[iteration])[2], glm::vec3(-800.0f, -600.0f, 0.0f), branchColor);
+		drawObject((LSys3 -> v[iteration])[3], glm::vec3(-800.0f, -600.0f, 0.0f), flowerColor1);
+		drawObject((LSys3 -> v[iteration])[4], glm::vec3(-800.0f, -600.0f, 0.0f), flowerColor2);
 	}
 
 	// Computation driver function
@@ -165,7 +192,7 @@ public:
 	{
 		FirstTreeComputations();
 		SecondTreeComputations();
-		// ThirdTreeComputations();
+		ThirdTreeComputations();
 	}
 };
 

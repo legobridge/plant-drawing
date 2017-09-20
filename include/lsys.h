@@ -40,44 +40,57 @@ public:
 	// A hash-map that maps characters to their rewrite strings
 	unordered_map<char, string> rewriteRule;
 
-	// ****************************************************
-	// Array of pairs of float vectors to store vertices
+	// ******************************************************
+	// Array of vectors of float vectors to store vertices
 	// at each of the 6 iterations:
-	// - The first vector in each pair stores positions
-	//   of the green colored points of the tree
-	// - The second vector in each pair stores positions
-	//   of the points that denote the flowers of the tree
-	// ****************************************************
-	pair<vector<float>, vector<float> > v[6];
+	// - The first vector in each element of the array stores
+	//   positions of the green colored points of the tree
+	// - The second vector in each element of the array stores
+	//   positions of the brown colored points of the tree
+	// - The third vector in each element of the array stores
+	//   positions of the light brown colored points of the tree
+	// - The fourth vector in each element of the array stores
+	//   positions of the orange colored points of the tree
+	// - The fifth vector in each element of the array stores
+	//   positions of the red colored points of the tree
+	// ******************************************************
+	vector<vector<float> > v[6];
+
+	// Branch depth during vertex calculations
+	int depth = 0;
 
 	LSys(unsigned int treeType)
 	{
-		encoding[0] = "T";
 		if (treeType == 1)
 		{
-			dist = 50;
-			delta = 28.0f;
-			rewriteRule['T'] = "T[+TR][-TR][TR]";
+			encoding[0] = "KT";
+			dist = 24.0f;
+			delta = 25.0f;
+			rewriteRule['T'] = "KT[++TTR][+TR][-TTR][-T++TR][--TTR]R";
 		}
 		if (treeType == 2)
 		{
-			dist = 10;
-			delta = 22.5f;
-			rewriteRule['T'] = "TT-[-T+T+T]+[+T-T-T]";
+			encoding[0] = "T";
+			dist = 14.0f;
+			delta = 24.0f;
+			rewriteRule['T'] = "TT-[-T+T+T]+[+T-T-T]R";
 		}
 		if (treeType == 3)
 		{
-			dist = 10;
-			delta = 22.5f;
-			rewriteRule['T'] = "TT-[-T+T+T]+[+T-T-T]";
+			encoding[0] = "T";
+			dist = 14.0f;
+			delta = 21.0f;
+			rewriteRule['T'] = "T[++T[-TR]]T[-TT[TR]]R";
 		}
 		pos = {0.0f, 0.0f};
 		angle = 90.0f;
+		depth = 0;
+		srand((int)time(NULL));
 	}
 
 	void expand()
 	{
-		for (int e = 0; e < 5; e++)
+		for (int e = 0; e < 4; e++)
 		{
 			string rewrite;
 			for (size_t i = 0; i < encoding[e].size(); i++)
@@ -106,37 +119,84 @@ public:
 
 	void setVertices()
 	{
-		for (int e = 0; e < 6; e++)
+		for (int e = 0; e < 5; e++)
 		{
+			v[e].resize(5);
 			for (size_t i = 0; i < encoding[e].length(); i++)
 			{
-				if (encoding[e][i] == 'T')
+				if (encoding[e][i] == 'T' || encoding[e][i] == 'K')
 				{
 					pair<float, float> npos = nextPos();
 					npos = {round(npos.first), round(npos.second)};
-					LineCalc twig(pos, npos);
-					vector<float> points = twig.getVertexVector();
-					for (size_t j = 0; j < points.size(); j++)
+
+					int y = max(3 - depth, 0);
+					for (int x = -y; x <= y; x++)
 					{
-						v[e].first.push_back(points[j]);
+						LineCalc Twig({pos.first + round(x * sin(angle)), pos.second + round(x * cos(angle))}, {npos.first + round(x * sin(angle)), npos.second + round(x * cos(angle))});
+						vector<float> points = Twig.getVertexVector();
+						for (size_t j = 0; j < points.size(); j += 3)
+						{
+							if (depth == 0)
+							{
+								v[e][1].push_back(points[j]);
+								v[e][1].push_back(points[j + 1]);
+								v[e][1].push_back(points[j + 2]);
+							}
+							else if (depth == 1)
+							{
+								v[e][2].push_back(points[j]);
+								v[e][2].push_back(points[j + 1]);
+								v[e][2].push_back(points[j + 2]);
+							}
+							else
+							{
+								v[e][0].push_back(points[j]);
+								v[e][0].push_back(points[j + 1]);
+								v[e][0].push_back(points[j + 2]);
+							}
+						}
 					}
 					pos = npos;
 				}
 				if (encoding[e][i] == 'R')
 				{
-					v[e].second.push_back(pos.first);
-					v[e].second.push_back(pos.second);
-					v[e].second.push_back(0.0f);
+					int chance = rand() % 100;
+					if ((chance > 70 && depth == e - 1) || (chance > 40 && depth == e))
+					{
+						float flowerRadius = (float)(rand() % 5) + 1;
+						while (flowerRadius--)
+						{
+							CircleCalc flower(pos, flowerRadius);
+							flower.computeVertexVector();
+							for (size_t j = 0; j < flower.v.size(); j += 3)
+							{
+								if (rand() % 2)
+								{
+									v[e][3].push_back(flower.v[j]);
+									v[e][3].push_back(flower.v[j + 1]);
+									v[e][3].push_back(flower.v[j + 2]);
+								}
+								else
+								{
+									v[e][4].push_back(flower.v[j]);
+									v[e][4].push_back(flower.v[j + 1]);
+									v[e][4].push_back(flower.v[j + 2]);
+								}
+							}
+						}
+					}
 				}
 				if (encoding[e][i] == '[')
 				{
 					stk.push({pos, angle});
+					depth++;
 				}
 				if (encoding[e][i] == ']')
 				{
 					pos = stk.top().first;
 					angle = stk.top().second;
 					stk.pop();
+					depth--;
 				}
 				if (encoding[e][i] == '-')
 				{

@@ -15,7 +15,6 @@ public:
 	pair<float, float> c;
 	float r;
 	vector<float> v;
-	size_t n;
 
 	CircleCalc(pair<float, float> c, float r)
 	{
@@ -23,20 +22,10 @@ public:
 		this -> r = r;
 	}
 
-	// Normalize coordinate magnitudes to values between -0.8 to 0.8
-	void normalizeCoordinates()
-	{
-		float mx = max(abs(c.first) + r, abs(c.second) + r);
-		for (size_t i = 0; i < n; i++)
-		{
-			v[i] = (0.8f * v[i]) / mx;
-		}
-	}
-
 	// Translate the calculated coordinates to the original centre
 	void translateCircle()
 	{
-		for (size_t i = 0; i < n; i += 3)
+		for (size_t i = 0; i < v.size(); i += 3)
 		{
 			v[i] += c.first;
 			v[i + 1] += c.second;
@@ -44,7 +33,7 @@ public:
 	}
 
 	// Add all symmetric points to the vertex vector
-	void addPoint(float x, float y)
+	void addPoints(float x, float y)
 	{
 		v.push_back(x);
 		v.push_back(y);
@@ -88,7 +77,7 @@ public:
 		float d = 1 - r;
 		float deltaE = 3;
 		float deltaSE = -2 * r + 5;
-		addPoint(x, y);
+		addPoints(x, y);
 
 		while (y > x)
 		{
@@ -108,24 +97,9 @@ public:
 				y--;
 			}
 			x++;
-			addPoint(x, y);
+			addPoints(x, y);
 		}
-	}
-
-	// Driver function to call other functions of the class
-	// and return an array of coordinates to be drawn
-	float* getVertexArray()
-	{
-		computeVertexVector();
-		n = v.size();
 		translateCircle();
-		normalizeCoordinates();
-		float *a = new float[n];
-		for (size_t i = 0; i < n; i++)
-		{
-			a[i] = v[i];
-		}
-		return a;
 	}
 };
 
