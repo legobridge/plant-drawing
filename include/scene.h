@@ -53,7 +53,7 @@ public:
 
 	void FirstTreeComputations()
 	{
-		LSys myLSys(1, "[T][+T][-T]");
+		LSys myLSys(1);
 		for (int i = 1; i <= iteration; i++)
 		{
 			myLSys.expand();
@@ -69,9 +69,23 @@ public:
 		vertexVectors1.second = p.second;
 	}
 
-	//void SecondTree()
-	//{
-	//}
+	void SecondTreeComputations()
+	{
+		LSys myLSys(2);
+		for (int i = 1; i <= iteration; i++)
+		{
+			myLSys.expand();
+		}
+
+		pair<vector<float>, vector<float> > p = myLSys.getVertices();
+
+		// ********* Branch Computations *********
+		vertexVectors2.first = p.first;
+
+
+		// ********* Flower Computations *********
+		vertexVectors2.second = p.second;
+	}
 
 	//void ThirdTree()
 	//{
@@ -120,11 +134,11 @@ public:
 		vector<float> g = {0.0f, 1.0f, 0.0f};
 		vector<float> r = {1.0f, 0.0f, 0.0f};
 
-		drawObject(vertexVectors1.first, glm::vec3(0.0f, 0.0f, 0.0f), g);
-		drawObject(vertexVectors1.second, glm::vec3(0.0f, 0.0f, 0.0f), r);
-		/*drawObject(vertexVectors2.first);
-		drawObject(vertexVectors2.second);
-		drawObject(vertexVectors3.first);
+		drawObject(vertexVectors1.first, glm::vec3(800.0f, -668.0f, 0.0f), g);
+		drawObject(vertexVectors1.second, glm::vec3(800.0f, -668.0f, 0.0f), r);
+		drawObject(vertexVectors2.first, glm::vec3(0.0f, -668.0f, 0.0f), g);
+		drawObject(vertexVectors2.second, glm::vec3(0.0f, -668.0f, 0.0f), r);
+		/*drawObject(vertexVectors3.first);
 		drawObject(vertexVectors3.second);*/
 	}
 
@@ -132,8 +146,8 @@ public:
 	void computeSceneVertices()
 	{
 		FirstTreeComputations();
-		/*SecondTreeComputations();
-		ThirdTreeComputations();*/
+		SecondTreeComputations();
+		// ThirdTreeComputations();
 	}
 };
 

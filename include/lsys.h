@@ -24,14 +24,29 @@ public:
 	vector<float> delta;
 	int depth;
 
-	LSys(unsigned int treeType, string axiom)
+	LSys(unsigned int treeType)
 	{
 		this -> treeType = treeType;
-		encoding = axiom;
+		if (treeType == 1)
+		{
+			encoding = "T";
+			dist = 50;
+			delta = { 28.0f, 27.0f, 26.0f, 25.0f };
+		}
+		if (treeType == 2)
+		{
+			encoding = "T";
+			dist = 10;
+			delta = {22.5f, 22.5f, 22.5f, 22.5f};
+		}
+		if (treeType == 3)
+		{
+			encoding = "T";
+			dist = 50;
+			delta = { 28.0f, 27.0f, 26.0f, 25.0f };
+		}
 		pos = {0.0f, 0.0f};
 		angle = 90.0f;
-		dist = 50;
-		delta = {28.0f, 27.0f, 26.0f, 25.0f};
 		depth = 0;
 	}
 
@@ -44,6 +59,9 @@ public:
 			{
 				rewrite += "T[+TR][-TR][TR]";
 			}
+			else if (encoding[i] == 'R')
+			{
+			}
 			else
 			{
 				rewrite += encoding[i];
@@ -54,7 +72,22 @@ public:
 
 	void expand2()
 	{
-		encoding += "F";
+		string rewrite;
+		for (size_t i = 0; i < encoding.size(); i++)
+		{
+			if (encoding[i] == 'T')
+			{
+				rewrite += "TT-[-T+T+T]+ [+T-T-T]";
+			}
+			else if (encoding[i] == 'R')
+			{
+			}
+			else
+			{
+				rewrite += encoding[i];
+			}
+		}
+		encoding = rewrite;
 	}
 
 	void expand3()
