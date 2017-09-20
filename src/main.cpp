@@ -54,13 +54,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	}
 	if (key == GLFW_KEY_UP && action == GLFW_PRESS)
 	{
-		myScene -> iteration = min(myScene -> iteration + 1, 5);
-		myScene -> computeSceneVertices();
+		myScene -> iterUp();
 	}
 	if (key == GLFW_KEY_DOWN && action == GLFW_PRESS)
 	{
-		myScene -> iteration = max(myScene -> iteration - 1, 0);
-		myScene -> computeSceneVertices();
+		myScene -> iterDown();
 	}
 }
 
@@ -78,7 +76,7 @@ bool initializeOpenGL()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// Window (default: 768p fullscreen) and Context Creation
-	window = glfwCreateWindow(SCR_W, SCR_H, "Window", glfwGetPrimaryMonitor(), NULL);
+	window = glfwCreateWindow(SCR_W, SCR_H, "Window", NULL, NULL);
 	if (!window)
 	{
 		cout << "Window or context creation failed" << endl;

@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <stack>
+#include <unordered_map>
 #include <time.h>
 
 #define PI 3.14159265
@@ -15,99 +16,83 @@ using namespace std;
 class LSys
 {
 public:
-	unsigned int treeType;
-	string encoding;
+
+	// Array of string encodings
+	// (each string in the array is for a certain iteration)
+	string encoding[6];
+
+	// Position of the drawing turtle
 	pair<float, float> pos;
+
+	// Orientation angle of the drawing turtle (w.r.t. +X axis)
 	float angle;
+
+	// Angle change that occurs with each + or - sign
+	float delta;
+
+	// Distance the turtle covers in one stride
 	float dist;
+
+	// Stack to store position and orientation of
+	// the turtle when entering a branch
 	stack<pair<pair<float, float>, float> > stk;
-	vector<float> delta;
-	int depth;
+
+	// A hash-map that maps characters to their rewrite strings
+	unordered_map<char, string> rewriteRule;
+
+	// ****************************************************
+	// Array of pairs of float vectors to store vertices
+	// at each of the 6 iterations:
+	// - The first vector in each pair stores positions
+	//   of the green colored points of the tree
+	// - The second vector in each pair stores positions
+	//   of the points that denote the flowers of the tree
+	// ****************************************************
+	pair<vector<float>, vector<float> > v[6];
 
 	LSys(unsigned int treeType)
 	{
-		this -> treeType = treeType;
+		encoding[0] = "T";
 		if (treeType == 1)
 		{
-			encoding = "T";
 			dist = 50;
-			delta = { 28.0f, 27.0f, 26.0f, 25.0f };
+			delta = 28.0f;
+			rewriteRule['T'] = "T[+TR][-TR][TR]";
 		}
 		if (treeType == 2)
 		{
-			encoding = "T";
 			dist = 10;
-			delta = {22.5f, 22.5f, 22.5f, 22.5f};
+			delta = 22.5f;
+			rewriteRule['T'] = "TT-[-T+T+T]+[+T-T-T]";
 		}
 		if (treeType == 3)
 		{
-			encoding = "T";
-			dist = 50;
-			delta = { 28.0f, 27.0f, 26.0f, 25.0f };
+			dist = 10;
+			delta = 22.5f;
+			rewriteRule['T'] = "TT-[-T+T+T]+[+T-T-T]";
 		}
 		pos = {0.0f, 0.0f};
 		angle = 90.0f;
-		depth = 0;
-	}
-
-	void expand1()
-	{
-		string rewrite;
-		for (size_t i = 0; i < encoding.size(); i++)
-		{
-			if (encoding[i] == 'T')
-			{
-				rewrite += "T[+TR][-TR][TR]";
-			}
-			else if (encoding[i] == 'R')
-			{
-			}
-			else
-			{
-				rewrite += encoding[i];
-			}
-		}
-		encoding = rewrite;
-	}
-
-	void expand2()
-	{
-		string rewrite;
-		for (size_t i = 0; i < encoding.size(); i++)
-		{
-			if (encoding[i] == 'T')
-			{
-				rewrite += "TT-[-T+T+T]+ [+T-T-T]";
-			}
-			else if (encoding[i] == 'R')
-			{
-			}
-			else
-			{
-				rewrite += encoding[i];
-			}
-		}
-		encoding = rewrite;
-	}
-
-	void expand3()
-	{
-		encoding += "F";
 	}
 
 	void expand()
 	{
-		if (treeType == 1)
+		for (int e = 0; e < 5; e++)
 		{
-			expand1();
-		}
-		if (treeType == 2)
-		{
-			expand2();
-		}
-		if (treeType == 3)
-		{
-			expand3();
+			string rewrite;
+			for (size_t i = 0; i < encoding[e].size(); i++)
+			{
+				char ch = encoding[e][i];
+				if (rewriteRule.find(ch) != rewriteRule.end())
+				{
+					rewrite += rewriteRule[ch];
+				}
+				else
+				{
+					rewrite += ch;
+				}
+			}
+			encoding[e + 1] = rewrite;
 		}
 	}
 
@@ -119,51 +104,51 @@ public:
 		return npos;
 	}
 
-	pair<vector<float>, vector<float> > getVertices()
+	void setVertices()
 	{
-		pair<vector<float>, vector<float> > p;
-		for (size_t i = 0; i < encoding.length(); i++)
+		for (int e = 0; e < 6; e++)
 		{
-			if (encoding[i] == 'T' || encoding[i] == 'K')
+			for (size_t i = 0; i < encoding[e].length(); i++)
 			{
-				pair<float, float> npos = nextPos();
-				npos = {round(npos.first), round(npos.second)};
-				LineCalc twig(pos, npos);
-				vector<float> points = twig.getVertexVector();
-				for (size_t j = 0; j < points.size(); j++)
+				if (encoding[e][i] == 'T')
 				{
-					p.first.push_back(points[j]);
+					pair<float, float> npos = nextPos();
+					npos = {round(npos.first), round(npos.second)};
+					LineCalc twig(pos, npos);
+					vector<float> points = twig.getVertexVector();
+					for (size_t j = 0; j < points.size(); j++)
+					{
+						v[e].first.push_back(points[j]);
+					}
+					pos = npos;
 				}
-				pos = npos;
+				if (encoding[e][i] == 'R')
+				{
+					v[e].second.push_back(pos.first);
+					v[e].second.push_back(pos.second);
+					v[e].second.push_back(0.0f);
+				}
+				if (encoding[e][i] == '[')
+				{
+					stk.push({pos, angle});
+				}
+				if (encoding[e][i] == ']')
+				{
+					pos = stk.top().first;
+					angle = stk.top().second;
+					stk.pop();
+				}
+				if (encoding[e][i] == '-')
+				{
+					angle -= delta;
+				}
+				if (encoding[e][i] == '+')
+				{
+					angle += delta;
+				}
 			}
-			if (encoding[i] == 'R')
-			{
-				p.second.push_back(pos.first);
-				p.second.push_back(pos.second);
-				p.second.push_back(0.0f);
-			}
-			if (encoding[i] == '[')
-			{
-				stk.push({pos, angle});
-				depth++;
-			}
-			if (encoding[i] == ']')
-			{
-				pos = stk.top().first;
-				angle = stk.top().second;
-				stk.pop();
-				depth--;
-			}
-			if (encoding[i] == '-')
-			{
-				angle -= delta[depth / 2];
-			}
-			if (encoding[i] == '+')
-			{
-				angle += delta[depth / 2];
-			}
+			pos = {0.0f, 0.0f};
 		}
-		return p;
 	}
 };
 #endif

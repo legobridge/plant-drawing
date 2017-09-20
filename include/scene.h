@@ -26,19 +26,14 @@ public:
 	// The Vertex Array Object to draw from
 	unsigned int VAO;
 
-	// ****************************************************
-	// Pairs of float vectors to store vertices of each
-	// of many trees:
-	// - The first vector in each pair stores positions
-	//   of the green colored points of the tree
-	// - The second vector in each pair stores positions
-	//   of the points that denote the flowers of the tree
-	// ****************************************************
-	pair<vector<float>, vector<float> > vertexVectors1;
-	pair<vector<float>, vector<float> > vertexVectors2;
-	pair<vector<float>, vector<float> > vertexVectors3;
+	// LSys object pointer for the first tree
+	LSys* LSys1;
+	// LSys object pointer for the second tree
+	LSys* LSys2;
+	// LSys object pointer for the third tree
+	LSys* LSys3;
 
-	// The iteration counter
+	// Iteration to render on screen
 	int iteration;
 
 	// Constructor definition
@@ -56,7 +51,14 @@ public:
 		glGenVertexArrays(1, &VAO);
 		glBindVertexArray(VAO);
 
-		// Initialize iteration counter with 0
+		// Initialize LSys Object with treeType = 1
+		LSys1 = new LSys(1);
+		// Initialize LSys Object with treeType = 2
+		LSys2 = new LSys(2);
+		// Initialize LSys Object with treeType = 3
+		LSys3 = new LSys(3);
+
+		// Start with 0th iteration (axiom)
 		iteration = 0;
 	}
 
@@ -65,77 +67,43 @@ public:
 	{
 		// Deallocation of Resources
 		delete myShader;
+		delete LSys1;
+		delete LSys2;
+		delete LSys3;
 		glDeleteVertexArrays(1, &VAO);
+	}
+
+	// Increase iteration counter
+	void iterUp()
+	{
+		iteration = min(iteration + 1, 5);
+	}
+
+	// Decrease iteration counter
+	void iterDown()
+	{
+		iteration = max(iteration - 1, 0);
 	}
 
 	// Vertex calculations for the first tree
 	void FirstTreeComputations()
 	{
-		// Create LSys Object with treeType = 1
-		LSys myLSys(1);
-
-		// Expand string according to iteration counter
-		for (int i = 1; i <= iteration; i++)
-		{
-			myLSys.expand();
-		}
+		// Expand instruction string
+		LSys1 -> expand();
 
 		// Fetch calculated vertices from LSys Object
-		pair<vector<float>, vector<float> > p = myLSys.getVertices();
-
-		// Branch Vertex Computations
-		vertexVectors1.first = p.first;
-
-
-		// Flower Vertex Computations
-		vertexVectors1.second = p.second;
+		LSys1 -> setVertices();
 	}
 
 	// Vertex calculations for the second tree
 	void SecondTreeComputations()
 	{
-		// Create LSys Object with treeType = 2
-		LSys myLSys(2);
-
-		// Expand string according to iteration counter
-		for (int i = 1; i <= iteration; i++)
-		{
-			myLSys.expand();
-		}
+		// Expand instruction string
+		LSys2 -> expand();
 
 		// Fetch calculated vertices from LSys Object
-		pair<vector<float>, vector<float> > p = myLSys.getVertices();
-
-		// Branch Vertex Computations
-		vertexVectors2.first = p.first;
-
-
-		// Flower Vertex Computations
-		vertexVectors2.second = p.second;
+		LSys2 -> setVertices();
 	}
-
-	//// Vertex calculations for the third tree
-	//void ThirdTreeComputations()
-	//{
-	//	// Create LSys Object with treeType = 3
-	//	LSys myLSys(3);
-
-	//	// Expand string according to iteration counter
-	//	for (int i = 1; i <= iteration; i++)
-	//	{
-	//		myLSys.expand();
-	//	}
-
-	//	// Fetch calculated vertices from LSys Object
-	//	pair<vector<float>, vector<float> > p = myLSys.getVertices();
-
-	//	// Branch Vertex Computations
-	//	vertexVectors3.first = p.first;
-
-
-	//	// Flower Vertex Computations
-	//	vertexVectors3.second = p.second;
-	//}
 
 	// Draw an object from the vertices stored in vertexVector,
 	// with its origin shifted to the coordinates in translationVector,
@@ -184,12 +152,12 @@ public:
 		vector<float> flowerColor = { 1.0f, 0.0f, 0.0f };
 
 		// Draw the computed objects on screen
-		drawObject(vertexVectors1.first, glm::vec3(800.0f, -668.0f, 0.0f), stalkColor);
-		drawObject(vertexVectors1.second, glm::vec3(800.0f, -668.0f, 0.0f), flowerColor);
-		drawObject(vertexVectors2.first, glm::vec3(0.0f, -668.0f, 0.0f), stalkColor);
-		drawObject(vertexVectors2.second, glm::vec3(0.0f, -668.0f, 0.0f), flowerColor);
-		//drawObject(vertexVectors3.first, glm::vec3(-800.0f, -668.0f, 0.0f), stalkColor);
-		//drawObject(vertexVectors3.second, glm::vec3(-800.0f, -668.0f, 0.0f), flowerColor);
+		drawObject((LSys1 -> v[iteration]).first, glm::vec3(800.0f, -668.0f, 0.0f), stalkColor);
+		drawObject((LSys1 -> v[iteration]).second, glm::vec3(800.0f, -668.0f, 0.0f), flowerColor);
+		drawObject((LSys2 -> v[iteration]).first, glm::vec3(0.0f, -668.0f, 0.0f), stalkColor);
+		drawObject((LSys2 -> v[iteration]).second, glm::vec3(0.0f, -668.0f, 0.0f), flowerColor);
+		//drawObject((LSys3 -> v[iteration]), glm::vec3(-800.0f, -668.0f, 0.0f), stalkColor);
+		//drawObject((LSys3 -> v[iteration]), glm::vec3(-800.0f, -668.0f, 0.0f), flowerColor);
 	}
 
 	// Computation driver function
