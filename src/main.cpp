@@ -123,6 +123,7 @@ int main()
 
 	// Create Scene object myScene and pre-process vertices
 	myScene = new Scene();
+	myScene -> computeBackground();
 	myScene -> computeSceneVertices();
 
 	// **************** Render Loop ****************
@@ -131,8 +132,7 @@ int main()
 		// ******** Rendering Commands ********
 
 		// Background Color
-		glClearColor(0.01f, 0.02f, 0.2f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		myScene -> drawBackground();
 
 		// Draw Objects
 		myScene -> drawObjects();

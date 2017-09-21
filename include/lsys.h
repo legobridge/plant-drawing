@@ -64,9 +64,10 @@ public:
 		if (treeType == 1)
 		{
 			encoding[0] = "KT";
-			dist = 24.0f;
+			dist = 25.0f;
 			delta = 25.0f;
-			rewriteRule['T'] = "KT[++TTR][+TR][-TTR][-T++TR][--TTR]R";
+			rewriteRule['T'] = "KT[++TTR][+T][-TT][-T++TR][--TTR]R";
+			// rewriteRule['T'] = "KT[++TTR][+TR][-TTR][-T++TR][--TTR]R";
 		}
 		if (treeType == 2)
 		{
@@ -161,8 +162,9 @@ public:
 				if (encoding[e][i] == 'R')
 				{
 					int chance = rand() % 100;
-					if ((chance > 70 && depth == e - 1) || (chance > 40 && depth == e))
+					if ((chance > 80 && depth == e - 1) || (chance > 30 && depth == e))
 					{
+						int x = 3 + rand() % 2;
 						float flowerRadius = (float)(rand() % 5) + 1;
 						while (flowerRadius--)
 						{
@@ -170,18 +172,9 @@ public:
 							flower.computeVertexVector();
 							for (size_t j = 0; j < flower.v.size(); j += 3)
 							{
-								if (rand() % 2)
-								{
-									v[e][3].push_back(flower.v[j]);
-									v[e][3].push_back(flower.v[j + 1]);
-									v[e][3].push_back(flower.v[j + 2]);
-								}
-								else
-								{
-									v[e][4].push_back(flower.v[j]);
-									v[e][4].push_back(flower.v[j + 1]);
-									v[e][4].push_back(flower.v[j + 2]);
-								}
+								v[e][x].push_back(flower.v[j]);
+								v[e][x].push_back(flower.v[j + 1]);
+								v[e][x].push_back(flower.v[j + 2]);
 							}
 						}
 					}
