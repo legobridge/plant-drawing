@@ -1,18 +1,16 @@
 // Main Source File for L-System Based Plant Drawing in OpenGL
 // Authors -  Asutosh Sistla, Kushal Agrawal, Suchit Kar
-// Date of Completion - 18/09/2017
+// Date of Completion - 22/09/2017
 
+#include <iostream>
+#include <algorithm>
+#include <vector>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <shader.h>
-#include <linecalc.h>
-#include <circlecalc.h>
-#include <iostream>
-#include <algorithm>
-#include <vector>
 #include <scene.h>
 
 using namespace std;
@@ -42,8 +40,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 // **************************************
 // ********** Input Processing **********
 // - Pressing Esc closes the window
-// - Up key computes next iteration
-// - Down key leads to previous iteration
+// - Up key displays next iteration
+// - Down key displays previous iteration
 // **************************************
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -123,7 +121,6 @@ int main()
 
 	// Create Scene object myScene and pre-process vertices
 	myScene = new Scene();
-	myScene -> computeBackground();
 	myScene -> computeSceneVertices();
 
 	// **************** Render Loop ****************
@@ -131,7 +128,7 @@ int main()
 	{
 		// ******** Rendering Commands ********
 
-		// Background Color
+		// Draw Background
 		myScene -> drawBackground();
 
 		// Draw Objects
@@ -139,7 +136,7 @@ int main()
 
 		// ****** End Rendering Commands ******
 
-		// Check for and call events, then swap buffers
+		// Check for events, then swap buffers
 		glfwPollEvents();
 		glfwSwapBuffers(window);
 	}
@@ -148,5 +145,6 @@ int main()
 	delete myScene;
 	glfwDestroyWindow(window);
 	glfwTerminate();
+
 	return 0;
 }

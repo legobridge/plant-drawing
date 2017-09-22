@@ -1,14 +1,13 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-
+#include <vector>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <shader.h>
 #include <lsys.h>
-#include <vector>
 
 using namespace std;
 
@@ -20,7 +19,7 @@ public:
 	int WORLD_W;
 	int WORLD_H;
 
-	// Pointer to a Shader Object
+	// Pointer to a Shader object
 	Shader* myShader;
 
 	// The Vertex Array Object to draw from
@@ -51,6 +50,8 @@ public:
 
 		// Build and compile shaders
 		myShader = new Shader("./src/shader/vertex.shader", "./src/shader/fragment.shader");
+
+		// Use the compiled shader program
 		myShader -> use();
 
 		// Generate and bind vertex array object
@@ -79,20 +80,22 @@ public:
 		glDeleteVertexArrays(1, &VAO);
 	}
 
-	// Increase iteration counter
+	// Increase iteration counter, to a maximum of 4
 	void iterUp()
 	{
 		iteration = min(iteration + 1, 4);
 	}
 
-	// Decrease iteration counter
+	// Decrease iteration counter, to a minimum of 0
 	void iterDown()
 	{
 		iteration = max(iteration - 1, 0);
 	}
 
+	// Compute the colors and vertices of the background
 	void computeBackground()
 	{
+		// Assign all coordinates to the background vertices array
 		for (int i = 0; i < WORLD_W; i++)
 		{
 			for (int j = 0; j < WORLD_H; j++)
@@ -103,11 +106,16 @@ public:
 			}
 		}
 
-		int soilWidth = 120;
+		// Define width and color of the soil
+		int soilWidth = 100;
 		float r = 0.074f;
 		float g = 0.000f;
 		float b = 0.200f;
+
+		// Calculate respective changes in color values per scanline
 		vector<float> delta = {r / (WORLD_H - soilWidth), g / (WORLD_H - soilWidth), b / (WORLD_H - soilWidth)};
+
+		// Decrement color values by delta over time, and assign values to array
 		for (int i = soilWidth; i < WORLD_H; i++)
 		{
 			backgroundColor[i][0] = r;
@@ -118,10 +126,15 @@ public:
 			b -= delta[2];
 		}
 
+		// Define color of the night sky
 		r = 0.300f;
 		g = 0.089f;
 		b = 0.030f;
+
+		// Calculate respective changes in color values per scanline
 		delta = { r / soilWidth, g / soilWidth, b / soilWidth};
+
+		// Decrement color values by delta over time, and assign values to array
 		for (int i = 0; i < soilWidth; i++)
 		{
 			backgroundColor[i][0] = r;
@@ -163,8 +176,10 @@ public:
 		LSys3->setVertices();
 	}
 
+	// Render the background using pre-calculated vertices and color values
 	void drawBackground()
 	{
+		// Process the rendering vertically (since color is constant over a scanline)
 		for (int i = 0; i < WORLD_H; i++)
 		{
 			// Setup transformation matrix
@@ -198,6 +213,9 @@ public:
 	// Draw an object from the vertices stored in vertexVector,
 	// with its origin shifted to the coordinates in translationVector,
 	// and its fragments shaded with the color defined by colorVector
+	// (Note that the world resolution dimensions for objects is
+	//  taken to be the double of the screen resolution dimensions
+	//  for calculations with higher precision and better fidelity)
 	void drawObject(vector<float> vertexVector, glm::vec3 translationVector, vector<float> colorVector)
 	{
 		// Setup transformation matrix
@@ -238,38 +256,47 @@ public:
 		delete vertices;
 	}
 
+	// Call rendering functions for all the pre-computed objects
 	void drawObjects()
 	{
-		// Color definitions for the tree parts
+		// ******* Color definitions for the tree parts *******
+
+		// (The trunk and branches change color with each iteration)
 		vector<float> stalkColor = {0.054f, 0.516f, 0.046f};
-		vector<float> trunkColor = {0.60f, 0.30f, 0.03f};
-		vector<float> branchColor = {0.49f, 0.44f, 0.09f};
-		vector<float> flowerColor1 = {0.740f, 0.301f, 0.070f};
-		vector<float> flowerColor2 = {0.800f, 0.005f, 0.000f};
+		vector<float> trunkColor = {0.550f * (iteration + 1) / 5, 0.210f, 0.030f};
+		vector<float> branchColor = {0.550f * (iteration + 1) / 5, 0.320f, 0.030f};
+		vector<float> flowerColor1 = {0.700f, 0.501f, 0.070f};
+		vector<float> flowerColor2 = {0.850f, 0.005f, 0.000f};
 
-		// Draw the computed objects on screen
-		drawObject((LSys1 -> v[iteration])[0], glm::vec3(800.0f, -650.0f, 0.0f), stalkColor);
-		drawObject((LSys1 -> v[iteration])[1], glm::vec3(800.0f, -650.0f, 0.0f), trunkColor);
-		drawObject((LSys1 -> v[iteration])[2], glm::vec3(800.0f, -650.0f, 0.0f), branchColor);
-		drawObject((LSys1 -> v[iteration])[3], glm::vec3(800.0f, -650.0f, 0.0f), flowerColor1);
-		drawObject((LSys1 -> v[iteration])[4], glm::vec3(800.0f, -650.0f, 0.0f), flowerColor2);
 
-		drawObject((LSys2 -> v[iteration])[0], glm::vec3(0.0f, -600.0f, 0.0f), stalkColor);
-		drawObject((LSys2 -> v[iteration])[1], glm::vec3(0.0f, -600.0f, 0.0f), trunkColor);
-		drawObject((LSys2 -> v[iteration])[2], glm::vec3(0.0f, -600.0f, 0.0f), branchColor);
-		drawObject((LSys2 -> v[iteration])[3], glm::vec3(0.0f, -600.0f, 0.0f), flowerColor1);
-		drawObject((LSys2 -> v[iteration])[4], glm::vec3(0.0f, -600.0f, 0.0f), flowerColor2);
+		// ******* Draw the computed objects on screen *******
 
-		drawObject((LSys3 -> v[iteration])[0], glm::vec3(-600.0f, -650.0f, 0.0f), stalkColor);
-		drawObject((LSys3 -> v[iteration])[1], glm::vec3(-600.0f, -650.0f, 0.0f), trunkColor);
-		drawObject((LSys3 -> v[iteration])[2], glm::vec3(-600.0f, -650.0f, 0.0f), branchColor);
-		drawObject((LSys3 -> v[iteration])[3], glm::vec3(-600.0f, -650.0f, 0.0f), flowerColor1);
-		drawObject((LSys3 -> v[iteration])[4], glm::vec3(-600.0f, -650.0f, 0.0f), flowerColor2);
+		// Calls for the first tree
+		drawObject((LSys1 -> v[iteration])[0], glm::vec3(800.0f, -630.0f, 0.0f), stalkColor);
+		drawObject((LSys1 -> v[iteration])[1], glm::vec3(800.0f, -630.0f, 0.0f), trunkColor);
+		drawObject((LSys1 -> v[iteration])[2], glm::vec3(800.0f, -630.0f, 0.0f), branchColor);
+		drawObject((LSys1 -> v[iteration])[3], glm::vec3(800.0f, -630.0f, 0.0f), flowerColor1);
+		drawObject((LSys1 -> v[iteration])[4], glm::vec3(800.0f, -630.0f, 0.0f), flowerColor2);
+
+		// Calls for the second tree
+		drawObject((LSys2 -> v[iteration])[0], glm::vec3(-100.0f, -680.0f, 0.0f), stalkColor);
+		drawObject((LSys2 -> v[iteration])[1], glm::vec3(-100.0f, -680.0f, 0.0f), trunkColor);
+		drawObject((LSys2 -> v[iteration])[2], glm::vec3(-100.0f, -680.0f, 0.0f), branchColor);
+		drawObject((LSys2 -> v[iteration])[3], glm::vec3(-100.0f, -680.0f, 0.0f), flowerColor1);
+		drawObject((LSys2 -> v[iteration])[4], glm::vec3(-100.0f, -680.0f, 0.0f), flowerColor2);
+
+		// Calls for the third tree
+		drawObject((LSys3 -> v[iteration])[0], glm::vec3(-650.0f, -630.0f, 0.0f), stalkColor);
+		drawObject((LSys3 -> v[iteration])[1], glm::vec3(-650.0f, -630.0f, 0.0f), trunkColor);
+		drawObject((LSys3 -> v[iteration])[2], glm::vec3(-650.0f, -630.0f, 0.0f), branchColor);
+		drawObject((LSys3 -> v[iteration])[3], glm::vec3(-650.0f, -630.0f, 0.0f), flowerColor1);
+		drawObject((LSys3 -> v[iteration])[4], glm::vec3(-650.0f, -630.0f, 0.0f), flowerColor2);
 	}
 
 	// Computation driver function
 	void computeSceneVertices()
 	{
+		computeBackground();
 		FirstTreeComputations();
 		SecondTreeComputations();
 		ThirdTreeComputations();
