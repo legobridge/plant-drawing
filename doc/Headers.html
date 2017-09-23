@@ -1,0 +1,198 @@
+<html>
+<head>
+    <title>Plant | Headers</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<h1 style="margin-top:50px">Documentation</h1>
+
+<a href="./overview.html"><btn>|| Go Back ||</btn></a>    
+
+<h2>Header Files</h2>
+    <br><h3 id=circlecalc>| circlecalc.h  </h3>
+    <p class="bold">class CircleCalc</p>
+    <p>This class generates a vector containing all the pixel coordinates
+        to render a circle.
+    </p>
+    <br>
+
+    <h4>|| Constructor</h4>
+    <p class="bold">CircleCalc(pair &ltfloat, float&gt c, float r)
+    </p>
+    <p>
+        Initilaises the center, <b>pair&ltfloat, float&gt c</b>, and the 
+        radius, <b>float r</b>, of the circle.
+    </p>
+    <br>
+
+    <h4>|| Member Fields</h4>
+    <p class="bold">pair&ltfloat, float&gt c</p>
+    <p>Stores the coordinates of the center.</p>
+    <p class="bold">float r;</p>
+    <p>Stores the radius.</p>
+    <p class="bold">vector&ltfloat&gt v</p>
+    <p>Stores the points to be rendered.</p>
+    <br>
+
+    <h4>|| Member Functions</h4>
+
+    <p class="bold">void translateCircle()</p>
+    <p>Translates the calculated coordintes in <b>vector&ltfloat&gt v</b> to 
+        the original center.</p>
+        
+    <p class="bold">void addPoints(float x, float y)</p>
+    <p>Adds point to <b>vector&ltfloat&gt v</b> using eight-fold symmetry of circle.</p>
+        
+    <p class="bold">void computeVertexVector()</p>
+    <p>Calculates point to be added to circle in first octant using mid-point 
+        algorithm.</p>
+
+    <br><hr><br>
+
+    <h3 id=linecalc>| linecalc  </h3>
+    <p class="bold">class LineCalc</p>
+    <p>This class generates a vector containing all the pixel coordinates
+        to render a line.</p>
+    <br>
+
+    <h4>|| Constructor</h4>
+    <p class="bold">LineCalc(pair &ltfloat, float&gt a, &ltfloat, float&gt b)
+    </p>
+    <p>Initilaises the two end points of the line, <b>pair&ltfloat, float&gt a</b> and 
+        <b>pair&ltfloat, float&gt b</b>.</p>
+    <br>
+
+    <h4>|| Member Fields</h4>
+    <p class="bold">pair&ltfloat, float&gt a, b</p>
+    <p>Stores the coordinates of the end points.</p>
+    <p class="bold">vector&ltfloat&gt v</p>
+    <p>Stores the points to be rendered.</p>
+    <p class="bold">int transformCase</p>
+    <p>Stores the transform case, i.e. which transform has been applied to the points
+        of the line.</p>
+    <br>
+
+    <h4>|| Member Functions</h4>
+    
+    <p class="bold">void findCase()</p>
+    <p>Finds which octant (of the first four) the slope vector belongs to and sets 
+        <b>int transformCase</b> accordingly.</p>
+
+    <p class="bold">void transformEndpoints()</p>
+    <p>Transforms the end points of the line, <b>pair&ltfloat, float&gt a</b> and 
+        <b>pair&ltfloat, float&gt b</b>, according to <b>int transformCase</b> to make
+        the slope vector lie in the first octant.</p>
+    
+    <p class="bold">pair&ltfloat, float&gt inverseTransformPoint(pair&ltfloat, float&gt p)
+    </p>
+    <p>Inversely transforms the calculated vector of points, <b>vector&ltfloat&gt v</b>, on
+         the line according to <b>int transformCase</b> to restore line to original
+         orientation.</p>
+    
+    <p class="bold">void computeVertexVector()</p>
+    <p>Calculates the points to the transformed line to be added to <b>vector&ltfloat&gt v</b>
+         using mid-point algorithm.</p>
+    
+    <p class="bold">float* getVertexVector()</p>
+    <p>Driver function to call other functions of the class and return an array of
+            normalised coordinates to be drawn</p>
+    
+    <br><hr><br>
+   
+    <h3 id=lsys>| lsys.h</h3>
+    <p class="bold">class Lsys</p>
+    <p>Creates a vector of vertices of the trees to be renndred according to Linden-Mayer
+        systems, using the Bresenham's algorithms in <b>linecalc.h</b> and <b>circlecalc.h</b>.
+        An object of this class represents a single tree.
+    </p>
+
+
+    <h4>|| Constructor</h4>
+    <p class="bold">LSys(unsigned int treeType)</p>
+    <p>Sets the encoding, distances, deviation angles and rewrite rules according to the tree 
+        type and initialises the position to the origin of the coordinate system and orientation
+        of the drawing turtle along the Y+ axis .</p>
+    <br>
+
+    <h4>|| Member Fields</h4>
+
+    <p class="bold">string encoding[5]</p>
+    <p>Encoding for each iteration.</p>
+    
+    <p class="bold">pair&ltfloat, float&gt pos</p>
+    <p>Positon of the drawing turtle.</p>
+
+    <p class="bold">float angle</p>
+    <p>Orientation angle of the drawing turtle.</p>
+
+    <p class="bold">float delta</p>
+    <p>Stores deviation angles associated with + and - signs.</p>
+
+    <p class="bold">stack&ltpair&ltpair&ltfloat, float&gt, float&gt &gt stk</p>
+    <p>Stores the postion and orientation of the turtle when entering a branch segment.</p>
+
+    <p class="bold">unordered_map&ltchar, string&gt rewriteRule</p>
+    <p>Maps characters to their respective rewrite strings.</p>
+
+    <p class="bold">vector&ltvector&;tfloat&gt &gt v[5]</p>
+    <p>An array of vectors that stores the vertices of each of the iterations.
+    <ul>
+        <li>First vector - Stores positons of green coloured points.
+        <li>Second vector - Stores positons of the tree trunk.
+        <li>Third vector - Stores positons of the branches.
+        <li>Fourth vector - Stores positons of the orange coloured.
+        <li>Fifth vector - Stores positons of the red coloured.
+    </ul></p>
+
+    <p class="bold">int depth</p>
+    <p>Stores branch depth while calculating vertices.</p>
+
+    <br>
+
+    <h4>|| Member Functions</h4>
+
+    <p class="bold">void expand()</p>
+    <p>Creates expanded forms of the LS system string for each iteration
+         and stores them in <b>string encoding[5]</b> accordingly.</p>
+
+    <p class="bold">pair&ltfloat, float&gt nextPos()</p>
+    <p>Calculates next position according to global position and angle 
+        variables</p>
+
+    <p class="bold">void setVertices()</p>
+    <p>Calculates and assigns vertices of all the tree parts according
+        to the expanded forms of the L system string using <b>linecalc.h</b> and <b>circlecalc.h</b>.</p>
+
+    <br><hr><br>
+    
+    <h3 id=scene>| scene.h</h3>
+
+    <h4>|| Constructor</h4>
+    <p class="bold"></p>
+    <p></p>
+
+    <h4>|| Member Fields</h4>
+
+    <br>
+
+    <h4>|| Member Functions</h4>
+
+    <br><hr><br>
+    
+    <h3 id=shader>| shader.h</h3>
+
+    <p class="bold">class Shader</p>
+    <p>This class generates the shader that will be used to fill in the 
+        vertex points.
+    </p>
+    <h4>Constructor</h4>
+    <p class="bold">Shader(const char* vertexPath, const char* fragmentPath)
+    </p>
+    <p>
+
+    </p>
+
+    <a href="./headers.html"><btn>|| Back to Top ||</btn></a>
+    
+</body>
+</html>
