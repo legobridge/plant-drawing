@@ -153,6 +153,7 @@ public:
 	}
 
 	// Driver function to call other functions of the class
+    // and return a vector of coordinates to be drawn
 	vector<float> getVertexVector()
 	{
         findCase();
