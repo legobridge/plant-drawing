@@ -15,18 +15,27 @@
     <h4>|| Constants</h4>
     <p class="bold">const unsigned int SCR_W
             <br>const unsigned int SCR_H</p>
-    <p>Default height and width of rendering screen.</p>
+    <p>Default height and width of the window.</p>
     <p class="bold">const unsigned int SCR_MIN_W
             <br>const unsigned int SCR_MIN_H</p>
-    <p>Minimum height and width of rendering screen.<p>
+    <p>Minimum height and width of the window.<p>
+    <p class="bold">const unsigned int SCR_MAX_W
+            <br>const unsigned int SCR_MAX_H</p>
+    <p>Maximum height and width of the window.<p>
     <br>
 
     <h4>|| Functions</h4>
-    <p class="bold">void processInput(GLFWwindow *window)</p>
-    <p>Closes the window upon pressing Esc key.</p>
-    <p class="bold">void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-    </p>
+    <p class="bold">void framebuffer_size_callback(GLFWwindow* window, int width, int height)</p>
     <p>Callback function for framebuffer resizing.</p>
+    <p class="bold">void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)</p>
+    <p>Callback function for input processing</p>
+    <ul>
+        <li>Esc closes the window</li>
+        <li>Up key displays next iteration</li>
+        <li>Down key displays previous iteration</li>
+    </ul>
+    <p class="bold">bool initializeOpenGL()</p>
+    <p></p>
     <p class="bold">int main()</p>
     <p></p>
 

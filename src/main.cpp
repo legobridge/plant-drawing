@@ -39,7 +39,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 // **************************************
 // ********** Input Processing **********
-// - Pressing Esc closes the window
+// - Esc closes the window
 // - Up key displays next iteration
 // - Down key displays previous iteration
 // **************************************
