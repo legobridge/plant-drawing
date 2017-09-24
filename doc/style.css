@@ -41,17 +41,18 @@ h3 {
 
 h4 {
     font-size: 20px;
-    padding-left: 35px;
+    padding-left: 30px;
 }
 
 p {
     padding: 5px;
+    padding-left: 35px;
     font-size: 18px;
 }
 
 p.bold {
-    margin-left: 15px;
     padding: 5px;
+    padding-left: 30px;    
     font-size: 18px;
     font-weight: bold;
 }

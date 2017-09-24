@@ -160,7 +160,8 @@
     <h4>|| Member Functions</h4>
 
     <p class="bold">void expand()</p>
-    <p>Generates expansions of strings stored in the <b>string encoding[]</b> array for each iteration.</p>
+    <p>Generates expansions of strings stored in the <b>string encoding[]</b> array for
+        each iteration.</p>
 
     <p class="bold">pair&ltfloat, float&gt nextPos()</p>
     <p>Calculates next position according to global position and angle 
@@ -168,10 +169,13 @@
 
     <p class="bold">void setVertices()</p>
     <p>Calculates and assigns vertices of all the tree parts according
-        to the expanded forms of the L-system string using <b>linecalc.h</b> and <b>circlecalc.h</b>.</p>
+        to the expanded forms of the L-system string using <b>linecalc.h</b> and 
+        <b>circlecalc.h</b>.</p>
 
-    <br><hr><br>
-    
+
+<br><hr><br>
+
+
     <h3 id=scene>| scene.h</h3>
 
     <h4>|| Constructor</h4>
@@ -248,18 +252,21 @@
     <p class="bold">void computeSceneVertices()</p>
     <p>Driver function to call all the computation functions.</p>
 
-    <br><hr><br>
-    
+
+<br><hr><br>
+
+
     <h3 id=shader>| shader.h</h3>
 
     <p class="bold">class Shader</p>
     <p>This class represents an abstraction of the shader program to be used. 
-        It compiles the vertex shader and the fragment shader and provides a handy <b>use</b> function.
-    </p>
-    <h4>Constructor</h4>
-    <p class="bold">Shader(const char* vertexPath, const char* fragmentPath)
-    </p>
+        It compiles the vertex shader and the fragment shader and provides a handy 
+        <b>use</b> function.</p>
 
+    <h4>Constructor</h4>
+    <p class="bold">Shader(const char* vertexPath, const char* fragmentPath)</p>
+    <p>Instantiates an object of this class using the file paths of <b>vertexShader</b> 
+    and <b>fragmentShader</b>.</p>
     <a href="./headers.html"><btn>|| Back to Top ||</btn></a>
     
 </body>
