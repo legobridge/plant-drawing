@@ -1,0 +1,85 @@
+@import url(http://fonts.googleapis.com/css?family=Roboto);    
+
+@import url(http://fonts.googleapis.com/css?family=Roboto);    
+body {
+    font-family: "Roboto", "Verdana", sans-serif;
+    margin: 0px auto;
+    width: 80%;
+}
+
+h1 {
+    font-size: 40px;
+    text-align: center;
+    color: #565656;
+    padding: 5px;
+    background-color: #ededed        
+}
+
+table.infobox {
+    border-radius: 4px;
+    background-color: #787878;
+    color: #ffffff;
+    padding: 10px;
+    width: 50%;
+    margin: 0px auto;        
+}
+
+td{
+    vertical-align: top;
+}
+
+h2 {
+    font-size: 30px;
+    padding: 2px;
+    padding-left: 10px;
+}
+
+h3 {
+    font-size: 22px;
+    padding-left: 20px;
+}
+
+h4 {
+    font-size: 20px;
+    padding-left: 30px;
+}
+
+p {
+    padding: 5px;
+    padding-left: 35px;
+    font-size: 18px;
+}
+
+p.bold {
+    padding: 5px;
+    padding-left: 30px;    
+    font-size: 18px;
+    font-weight: bold;
+}
+
+a {
+    text-decoration: none;
+    color: #000000;
+}
+
+div.contentbox{
+    margin: 0px auto;
+    width: 40%;
+    padding-left: 50px;
+}
+
+btn{
+    margin-left: 20px;
+    padding: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    float: right;
+    background-color: #ededed;
+    border-radius: 4px;
+    border: 2px solid #000000;
+}
+
+btn:hover{
+    color: #ffffff;
+    background-color: #ababab;
+}

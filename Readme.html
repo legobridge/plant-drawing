@@ -1,0 +1,25 @@
+<h1 id="plantdrawingusinglsystems">Plant Drawing Using L-Systems</h1>
+
+<p><em>The complete documentation can be found <a href="./doc/Overview.html">here</a></em></p>
+
+<p>This project was made as a part of the Computer Graphics course (IS F311) offered at BITS Pilani, Hyderabad Campus. It features graphical rendering of trees using Lindenmayer Systems. The trees are composed entirely of straight lines and circles, which are themselves drawn using Bresenham's Midpoint Algorithm.</p>
+
+<p>The project is written entirely in C++, using the Open Graphics Library (OpenGL) for all graphical rendering needs. Certain third party libraries which complement OpenGL are also used, consisting of but not limited to <a href="http://www.glfw.org/">GLFW</a> and <a href="http://glad.dav1d.de/">GLAD</a>.</p>
+
+<p>We faced many design and implementation challenges while working on this project, the major roadblocks being:</p>
+
+<ul>
+<li><strong>Rendering using OpenGL:</strong> The mere setup of something as new as a graphics library took us a while. The concepts of fragment shaders, vertex shaders, and the limited -1 to 1 coordinate system of OpenGL took some time to understand.</li>
+
+<li><strong>Working with headers and classes in C++:</strong> Having used C-style languages only for single file algorithmic problems before, it was a major challenge writing an entire project in C++, where OOP paradigms are a little harder to implement than say, in Java or Python.</li>
+
+<li><strong>Optimizations to prevent long processing times</strong></li>
+</ul>
+
+<p>The overall time complexity of the preprocessing phase is mostly due to the string expansion algorithm, and is approximately <strong>O(k ^ n)</strong>, where <strong>k</strong> is the number of rewritable letters ('T' in our strings) in the rewritten string, and <strong>n</strong> is the number of iterations to be processed (4 in our case).</p>
+
+<p>The time complexity during the program runtime (while changing the iteration to display) is linear in the number of coordinates to render, i.e., <strong>O(v)</strong>, where <strong>v</strong> is the number of vertices to be rendered.</p>
+
+<p>The program can be evaluated by running the .exe file in the root folder of the project (Visual Studio and a graphics card supporting OpenGL 4.0 or higher are required).</p>
+
+<p><strong>Project Authors: Asutosh Sistla, Kushal Agrawal, and Suchit Kar</strong></p>

@@ -50,9 +50,9 @@ public:
 	// - The third vector in each element of the array stores
 	//   position vertices of the branches of the tree
 	// - The fourth vector in each element of the array stores
-	//   positions of the orange colored points of the tree
+	//   positions of the orange colored flowers of the tree
 	// - The fifth vector in each element of the array stores
-	//   positions of the red colored points of the tree
+	//   positions of the red colored flowers of the tree
 	// ***********************************************************
 	vector<vector<float> > v[5];
 
@@ -89,6 +89,8 @@ public:
 		srand((int)time(NULL));
 	}
 
+
+	// Expand strings stored in the encoding array
 	void expand()
 	{
 		for (int e = 0; e < 4; e++)
