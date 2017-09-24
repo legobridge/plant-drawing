@@ -10,34 +10,54 @@
 
     <h2>Source Files</h2>
     <br>
-    <h3 id=main>| Main  </h3>
+    <h3 id=main>| main.cpp </h3>
 
     <h4>|| Constants</h4>
     <p class="bold">const unsigned int SCR_W
             <br>const unsigned int SCR_H</p>
     <p>Default height and width of the window.</p>
+
     <p class="bold">const unsigned int SCR_MIN_W
             <br>const unsigned int SCR_MIN_H</p>
-    <p>Minimum height and width of the window.<p>
+    <p>Minimum height and width of the window.</p>
+
     <p class="bold">const unsigned int SCR_MAX_W
             <br>const unsigned int SCR_MAX_H</p>
-    <p>Maximum height and width of the window.<p>
+    <p>Maximum height and width of the window.</p>
+
+    <p class="bold">GLFWwindow* window</p>
+    <p>Pointer to a GLFWwindow object.</p>
+
+    <p class="bold">Scene* myScene</p>
+    <p>Pointer to a <b>Scene</b> object.</p>
     <br>
 
     <h4>|| Functions</h4>
-    <p class="bold">void framebuffer_size_callback(GLFWwindow* window, int width, int height)</p>
+    <p class="bold">void framebuffer_size_callback(GLFWwindow* window, int width,
+         int height)</p>
     <p>Callback function for framebuffer resizing.</p>
-    <p class="bold">void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)</p>
+
+    <p class="bold">void key_callback(GLFWwindow* window, int key, int scancode,
+         int action, int mods)</p>
     <p>Callback function for input processing</p>
     <ul>
         <li>Esc closes the window</li>
         <li>Up key displays next iteration</li>
         <li>Down key displays previous iteration</li>
     </ul>
+
     <p class="bold">bool initializeOpenGL()</p>
-    <p></p>
+    <p>Intialises OpenGL, creates a window, setting the the window resize callbacks,
+         keypress callbacks, aspect ratio, window size limits and loads OpenGL function
+         pointers using <b>GLAD</b>. Returns true unless the initialisation of any component 
+         fails.</p>
+    <br>
+
+    <h4>|| Main</h4>
     <p class="bold">int main()</p>
-    <p></p>
+    <p>Initialises OpenGL, creates a new <b>Scene</b> object to pre-process the vectors
+    to be rendered, draws the background and the trees as long as window is open. Upon 
+    closing, deallocates all resources via <b>Scene</b>'s destructor and terminates <b>GLFW</b>.</p>
 
     <a href="./source.html"><btn>|| Back to Top ||</btn></a>
     
